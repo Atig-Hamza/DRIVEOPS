@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
   Menu, X, ArrowRight, Check, ChevronRight,
   BarChart2, Map, Shield, Truck, Users, Globe,
-  ArrowUpRight, Play
+  ArrowUpRight, Play, Battery, Zap, MessageSquare, FileText, Bell
 } from 'lucide-react';
 
 // --- Components ---
@@ -260,76 +260,161 @@ const StickyFeature = ({ number, title, description, children }) => {
 const Features = () => {
   return (
     <section className="bg-white">
+      {/* Feature 1: Real-Time Visibility */}
       <StickyFeature
         number="1"
         title="Real-Time Visibility"
         description="See your entire operation at a glance. Live GPS tracking, status updates, and predictive ETAs for every asset in your fleet."
       >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-3/4 h-3/4 bg-white rounded-xl shadow-xl border border-neutral-100 p-6 relative">
-            <div className="absolute top-6 right-6 flex gap-2">
-              <div className="w-2 h-2 rounded-full bg-red-400"></div>
-              <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-              <div className="w-2 h-2 rounded-full bg-green-400"></div>
+        <div className="absolute inset-0 flex items-center justify-center bg-neutral-50">
+          <div className="w-[85%] bg-white rounded-xl shadow-xl border border-neutral-100 overflow-hidden">
+            <div className="px-6 py-4 border-b border-neutral-100 flex justify-between items-center bg-white">
+              <div className="font-medium text-neutral-900">Fleet Command</div>
+              <div className="flex gap-2">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              </div>
             </div>
-            <div className="mt-8 space-y-4">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-white rounded border border-neutral-200"></div>
-                    <div className="w-24 h-3 bg-neutral-200 rounded"></div>
+            <div className="divide-y divide-neutral-50">
+              {[
+                { id: "V-402", status: "Moving", loc: "I-80 West", speed: "65mph" },
+                { id: "V-405", status: "Idle", loc: "Loading Dock", speed: "0mph" },
+                { id: "V-409", status: "Moving", loc: "Hwy 101", speed: "58mph" },
+                { id: "V-412", status: "Stopped", loc: "Rest Area", speed: "0mph" },
+              ].map((vehicle, i) => (
+                <div key={i} className="p-4 flex items-center justify-between hover:bg-neutral-50 transition-colors cursor-pointer group">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-2 h-2 rounded-full ${vehicle.status === 'Moving' ? 'bg-green-500 animate-pulse' : vehicle.status === 'Idle' ? 'bg-yellow-500' : 'bg-neutral-300'}`}></div>
+                    <div>
+                      <div className="text-sm font-bold text-neutral-900">{vehicle.id}</div>
+                      <div className="text-xs text-neutral-500">{vehicle.loc}</div>
+                    </div>
                   </div>
-                  <div className="w-12 h-3 bg-neutral-200 rounded"></div>
+                  <div className="text-right">
+                    <div className="text-xs font-mono text-neutral-400">{vehicle.speed}</div>
+                    <div className="text-[10px] font-medium text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded mt-1 inline-block">{vehicle.status}</div>
+                  </div>
                 </div>
               ))}
+            </div>
+            <div className="p-3 bg-neutral-50 text-center text-xs text-neutral-400 font-medium border-t border-neutral-100">
+              Viewing 4 of 142 Active Vehicles
             </div>
           </div>
         </div>
       </StickyFeature>
 
+      {/* Feature 2: Predictive Maintenance */}
       <StickyFeature
         number="2"
         title="Predictive Maintenance"
         description="Stop reacting to breakdowns. Our AI analyzes mileage and usage patterns to schedule service before issues occur."
       >
-        <div className="absolute inset-0 bg-neutral-900 p-12 text-white flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <Shield className="w-12 h-12 text-neutral-400" strokeWidth={1} />
-            <div className="text-right">
-              <div className="text-3xl font-mono">14,203</div>
-              <div className="text-sm text-neutral-500">Miles to Service</div>
+        <div className="absolute inset-0 bg-neutral-900 p-8 text-white flex flex-col">
+          <div className="flex justify-between items-start mb-12">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-yellow-400" />
+              </div>
+              <div>
+                <div className="text-sm font-medium text-white">Vehicle Health</div>
+                <div className="text-xs text-neutral-400">Unit #892 Diagnostics</div>
+              </div>
+            </div>
+            <div className="bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">
+              ACTION REQUIRED
             </div>
           </div>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-neutral-400">Oil Life</span>
-              <span>82%</span>
+
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+              <div className="text-xs text-neutral-400 mb-2">Tire Pressure</div>
+              <div className="grid grid-cols-2 gap-2">
+                {[32, 31, 32, 28].map((psi, i) => (
+                  <div key={i} className={`text-center p-2 rounded ${psi < 30 ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-white/5 text-white'}`}>
+                    <div className="text-lg font-bold">{psi}</div>
+                    <div className="text-[10px] opacity-60">PSI</div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="h-1 w-full bg-neutral-800 rounded-full overflow-hidden">
-              <div className="h-full w-[82%] bg-white"></div>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/10 flex flex-col justify-between">
+              <div className="text-xs text-neutral-400">Engine Temp</div>
+              <div className="flex items-end gap-1 h-20">
+                {[40, 45, 42, 50, 55, 60, 85, 90, 88, 85].map((h, i) => (
+                  <div key={i} className={`w-full rounded-t-sm ${h > 80 ? 'bg-red-500' : 'bg-green-500'}`} style={{ height: `${h}%` }}></div>
+                ))}
+              </div>
+              <div className="text-right text-xl font-bold text-red-400">210°F</div>
             </div>
           </div>
+
+          <button className="w-full bg-white text-neutral-900 font-bold py-4 rounded-xl hover:bg-neutral-200 transition-colors mt-auto flex items-center justify-center gap-2">
+            Schedule Service
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </StickyFeature>
 
+      {/* Feature 3: Driver Workflow */}
       <StickyFeature
         number="3"
         title="Driver Workflow"
         description="Empower your team with a mobile experience they'll actually enjoy. Digital logs, instant document scanning, and seamless communication."
       >
         <div className="absolute inset-0 flex items-center justify-center bg-[#F5F5F7]">
-          <div className="w-[280px] h-[560px] bg-white rounded-[40px] border-[8px] border-neutral-900 shadow-2xl overflow-hidden relative">
-            <div className="absolute top-0 left-0 right-0 h-24 bg-neutral-50 border-b border-neutral-100 p-6 pt-12">
-              <div className="text-lg font-bold">Today's Route</div>
-            </div>
-            <div className="p-6 space-y-4">
-              <div className="p-4 bg-neutral-900 text-white rounded-xl shadow-lg">
-                <div className="text-xs text-neutral-400 mb-1">Current Stop</div>
-                <div className="font-medium">Distribution Center A</div>
+          <div className="w-[300px] h-[600px] bg-white rounded-[40px] border-[8px] border-neutral-900 shadow-2xl overflow-hidden relative flex flex-col">
+            {/* Mobile Header */}
+            <div className="bg-neutral-900 text-white p-6 pt-12 pb-4">
+              <div className="flex justify-between items-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                  <ChevronRight className="w-5 h-5 rotate-180" />
+                </div>
+                <div className="font-medium">Dispatch Chat</div>
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                  <Bell className="w-4 h-4" />
+                </div>
               </div>
-              <div className="p-4 bg-white border border-neutral-100 rounded-xl">
-                <div className="text-xs text-neutral-400 mb-1">Next Stop</div>
-                <div className="font-medium">Retail Location B</div>
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 bg-neutral-50 p-4 space-y-4 overflow-y-auto">
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-neutral-200 flex-shrink-0"></div>
+                <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-neutral-600 max-w-[80%]">
+                  Hi Michael, new load assigned. Pickup at Distribution Center A.
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-neutral-200 flex-shrink-0"></div>
+                <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-neutral-600 max-w-[80%]">
+                  <div className="font-bold text-neutral-900 mb-1">Load #4921</div>
+                  <div className="text-xs text-neutral-500 mb-2">24 Pallets • Electronics</div>
+                  <button className="bg-neutral-900 text-white text-xs px-3 py-2 rounded-lg w-full">View Details</button>
+                </div>
+              </div>
+              <div className="flex gap-3 flex-row-reverse">
+                <div className="w-8 h-8 rounded-full bg-neutral-900 flex-shrink-0"></div>
+                <div className="bg-neutral-900 text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-sm max-w-[80%]">
+                  Accepted. I'm 10 mins away.
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-neutral-200 flex-shrink-0"></div>
+                <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-neutral-600 max-w-[80%]">
+                  Great. Don't forget to scan the POD when you arrive.
+                </div>
+              </div>
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 bg-white border-t border-neutral-100">
+              <div className="bg-neutral-100 rounded-full px-4 py-3 text-sm text-neutral-400 flex justify-between items-center">
+                <span>Type a message...</span>
+                <div className="w-6 h-6 rounded-full bg-neutral-900 flex items-center justify-center">
+                  <ArrowRight className="w-3 h-3 text-white" />
+                </div>
               </div>
             </div>
           </div>
@@ -341,20 +426,28 @@ const Features = () => {
 
 const Marquee = () => {
   return (
-    <div className="py-20 bg-neutral-900 overflow-hidden">
+    <div className="py-24 bg-white border-b border-neutral-100 relative overflow-hidden">
+      <div className="text-center mb-12">
+        <span className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Trusted by industry leaders</span>
+      </div>
+
+      {/* Gradient Masks */}
+      <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
+      <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
+
       <div className="flex whitespace-nowrap">
         <motion.div
           animate={{ x: [0, -1000] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="flex gap-20 items-center pr-20"
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="flex gap-24 items-center pr-24"
         >
           {["DHL", "MAERSK", "FEDEX", "UPS", "DB SCHENKER", "KUEHNE+NAGEL", "CH ROBINSON", "XPO"].map((logo, i) => (
-            <span key={i} className="text-4xl font-serif font-bold text-neutral-700 select-none">
+            <span key={i} className={`text-4xl font-bold text-neutral-300 select-none ${i % 2 === 0 ? 'font-serif' : 'font-sans'}`}>
               {logo}
             </span>
           ))}
           {["DHL", "MAERSK", "FEDEX", "UPS", "DB SCHENKER", "KUEHNE+NAGEL", "CH ROBINSON", "XPO"].map((logo, i) => (
-            <span key={`dup-${i}`} className="text-4xl font-serif font-bold text-neutral-700 select-none">
+            <span key={`dup-${i}`} className={`text-4xl font-bold text-neutral-300 select-none ${i % 2 === 0 ? 'font-serif' : 'font-sans'}`}>
               {logo}
             </span>
           ))}
@@ -366,19 +459,37 @@ const Marquee = () => {
 
 const Testimonial = () => {
   return (
-    <section className="py-40 bg-white">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center">
-        <h3 className="text-4xl md:text-6xl font-serif leading-tight max-w-5xl mx-auto mb-16 text-neutral-900">
-          "DriveOps isn't just software. It's the nervous system of our entire logistics network. We've never been faster."
-        </h3>
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 bg-neutral-100 rounded-full overflow-hidden">
-            {/* Placeholder for headshot */}
-            <div className="w-full h-full bg-neutral-200"></div>
-          </div>
+    <section className="py-40 bg-white relative overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <div className="font-medium text-lg">Alexander Vane</div>
-            <div className="text-neutral-500">VP Operations, GlobalFreight</div>
+            <h3 className="text-4xl md:text-6xl font-serif leading-tight mb-12 text-neutral-900">
+              "DriveOps isn't just software. It's the nervous system of our entire logistics network."
+            </h3>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-neutral-100 rounded-full overflow-hidden">
+                <div className="w-full h-full bg-neutral-200"></div>
+              </div>
+              <div>
+                <div className="font-medium text-lg">Alexander Vane</div>
+                <div className="text-neutral-500">VP Operations, GlobalFreight</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="bg-neutral-50 p-8 rounded-2xl">
+              <div className="text-5xl font-serif text-neutral-900 mb-2">20%</div>
+              <div className="text-neutral-500">Reduction in fuel costs within 3 months</div>
+            </div>
+            <div className="bg-neutral-900 text-white p-8 rounded-2xl">
+              <div className="text-5xl font-serif mb-2">15hr</div>
+              <div className="text-neutral-400">Weekly admin time saved per dispatcher</div>
+            </div>
+            <div className="bg-neutral-50 p-8 rounded-2xl col-span-2">
+              <div className="text-5xl font-serif text-neutral-900 mb-2">99.9%</div>
+              <div className="text-neutral-500">Uptime for critical fleet operations</div>
+            </div>
           </div>
         </div>
       </div>
@@ -390,16 +501,37 @@ const Footer = () => {
   return (
     <footer className="bg-neutral-900 text-white pt-32 pb-12">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row justify-between items-start mb-32">
-          <h2 className="text-6xl md:text-8xl font-serif tracking-tight mb-12 md:mb-0">
-            Let's move <br /> the world.
+
+        {/* CTA Block */}
+        <div className="mb-32 border-b border-white/10 pb-32">
+          <h2 className="text-6xl md:text-8xl font-serif tracking-tight mb-12">
+            Ready to <br /> move?
           </h2>
-          <div className="flex flex-col gap-8 text-right">
-            <a href="#" className="text-2xl hover:text-neutral-400 transition-colors">hello@driveops.com</a>
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            <button className="bg-white text-neutral-900 px-8 py-4 rounded-full text-lg font-medium hover:bg-neutral-200 transition-colors">
+              Start Free Trial
+            </button>
+            <button className="text-white border border-white/20 px-8 py-4 rounded-full text-lg font-medium hover:bg-white/10 transition-colors">
+              Contact Sales
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-start mb-12">
+          <div className="flex flex-col gap-4">
+            <a href="#" className="text-2xl font-serif font-semibold tracking-tight">DriveOps.</a>
+            <div className="flex items-center gap-2 text-sm text-green-400">
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+              All Systems Operational
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-8 text-right mt-12 md:mt-0">
+            <a href="#" className="text-2xl hover:text-neutral-400 transition-colors">hamzaatig@icloud.com</a>
             <div className="flex gap-8 justify-end">
-              <a href="#" className="text-neutral-400 hover:text-white transition-colors">Twitter</a>
-              <a href="#" className="text-neutral-400 hover:text-white transition-colors">LinkedIn</a>
-              <a href="#" className="text-neutral-400 hover:text-white transition-colors">Instagram</a>
+              <a href="https://atig.me" className="text-neutral-400 hover:text-white transition-colors">Portfolio</a>
+              <a href="https://linkedin.com/in/hamza-atig" className="text-neutral-400 hover:text-white transition-colors">LinkedIn</a>
+              <a href="https://github.com/Atig-Hamza" className="text-neutral-400 hover:text-white transition-colors">GitHub</a>
             </div>
           </div>
         </div>
@@ -409,7 +541,7 @@ const Footer = () => {
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
           </div>
-          <div>© 2024 DriveOps Inc. Zurich • San Francisco</div>
+          <div>© 2025 DriveOps, Created, Designed and Developed by Hamza Atig</div>
         </div>
       </div>
     </footer>
