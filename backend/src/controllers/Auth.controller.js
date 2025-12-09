@@ -30,4 +30,4 @@ export const ValidateToken = async (req, res) => {
     }
 };
 
-export default { Register, Login };
+export default { Register, Login, ValidateToken };
