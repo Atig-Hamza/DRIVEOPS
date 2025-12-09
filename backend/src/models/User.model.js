@@ -22,4 +22,8 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
+export const getUserByEmail = async (email) => {
+    return await User.findOne({ email });
+};
+
 export default User;
