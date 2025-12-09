@@ -4,7 +4,8 @@ import {
     ArrowRight, Mail, Lock, Eye, EyeOff, Check,
     Navigation, Truck, MapPin, Clock, Package, CheckCircle2
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -12,8 +13,10 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState('');
     const truckControls = useAnimation();
     const [journeyStep, setJourneyStep] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const sequence = async () => {
@@ -32,10 +35,34 @@ const Login = () => {
         sequence();
     }, [truckControls]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => setIsLoading(false), 2000);
+        setError('');
+        
+        try {
+            const response = await axios.post('http://localhost:4000/api/auth/login', {
+                email,
+                password
+            });
+            
+            console.log('Login successful:', response.data);
+            
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            
+            if (response.data.user.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/driver/dashboard');
+            }
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            setError(error.response?.data?.message || 'Invalid email or password');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -57,6 +84,11 @@ const Login = () => {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                <span className="block sm:inline">{error}</span>
+                            </div>
+                        )}
                         <div className="space-y-4">
                             <div className="group relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-neutral-900 transition-colors"><Mail className="w-5 h-5" /></div>
