@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -30,5 +31,22 @@ export const createUser = async (userData) => {
     const user = new User(userData);
     return await user.save();
 };
+
+async function AdminCredentials() {
+    const isAdminExist = await getUserByEmail('admin@driveops.com');
+    if (!isAdminExist) {
+        const hashPassword = await bcrypt.hash("adminadmin", 10);
+        await createUser({
+            email: "admin@driveops.com",
+            password: hashPassword,
+            role: "admin"
+        });
+        console.log("Admin user created");
+    } else {
+        console.log("Admin user already exists");
+    }
+}
+
+AdminCredentials();
 
 export default User;
