@@ -30,10 +30,10 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <button className="text-sm font-medium text-neutral-900 hover:text-neutral-600 transition-colors px-4">Log in</button>
-          <button className="bg-neutral-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-neutral-900/20">
+          <a href="/login" className="text-sm font-medium text-neutral-900 hover:text-neutral-600 transition-colors px-4">Log in</a>
+          <a href="/register" className="bg-neutral-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-neutral-900/20">
             Get Started
-          </button>
+          </a>
         </div>
       </div>
     </nav >
