@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
+import AdminDashboard from './Pages/Admin/Dashboard';
+import DriverDashboard from './Pages/Driver/Dashboard';
+import AuthMiddleware from './middleware/AuthMiddleware.jsx';
 
 function App() {
   return (
@@ -11,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="/admin/dashboard" element={<AuthMiddleware><AdminDashboard /></AuthMiddleware>} />
+        <Route path="/driver/dashboard" element={<AuthMiddleware><DriverDashboard /></AuthMiddleware>} />
       </Routes>
     </Router>
   );
