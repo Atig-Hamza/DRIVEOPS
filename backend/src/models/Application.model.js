@@ -54,5 +54,12 @@ export const ApproveApplication = async (applicationEmail) => {
     );
 }
 
+export const RejectApplication = async (applicationEmail) => {
+    return await Application.findOneAndUpdate(
+        { Email: applicationEmail },
+        { status: 'rejected' },
+        { new: true }
+    );
+};
 
 export default Application;
