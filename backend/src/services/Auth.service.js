@@ -29,4 +29,13 @@ export const login = async (email, password) => {
     return { token, user };
 }
 
-export default { register, login };
+export const verifyToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, config.jwtSecret);
+        return decoded;
+    } catch (error) {
+        throw new Error('Invalid token');
+    }
+}
+
+export default { register, login, verifyToken };
