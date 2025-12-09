@@ -12,5 +12,21 @@ export const register = async (email, password, role) => {
     return newUser;
 }
 
+export const login = async (email, password) => {
+    const user = await getUserByEmail(email);
+    if (!user) {
+        throw new Error('Invalid email or password');
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new Error('Invalid email or password');
+    }
+    const token = jwt.sign(
+        { userId: user._id, role: user.role },
+        config.jwtSecret,
+        { expiresIn: '1h' }
+    );
+    return { token, user };
+}
 
-export default { register };
+export default { register, login };
