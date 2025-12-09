@@ -29,13 +29,14 @@ export const login = async (email, password) => {
     return { token, user };
 }
 
-export const verifyToken = (token) => {
+export const verifyTokenAndRole = (token) => {
     try {
         const decoded = jwt.verify(token, config.jwtSecret);
-        return decoded;
+        const role = decoded.role;
+        return { valid: true, role };
     } catch (error) {
-        throw new Error('Invalid token');
+        return { valid: false, role: null };
     }
 }
 
-export default { register, login, verifyToken };
+export default { register, login, verifyTokenAndRole };
