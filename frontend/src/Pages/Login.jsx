@@ -4,6 +4,7 @@ import {
     ArrowRight, Mail, Lock, Eye, EyeOff, Check,
     Navigation, Truck, MapPin, Clock, Package, CheckCircle2
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -81,7 +82,7 @@ const Login = () => {
                             {isLoading && (<div className="absolute inset-0 flex items-center justify-center"><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div></div>)}
                         </button>
                     </form>
-                    <div className="mt-8 text-center"><span className="text-neutral-500 text-sm">Don't have an account? </span><a href="#" className="text-neutral-900 font-medium text-sm hover:underline">Start free trial</a></div>
+                    <div className="mt-8 text-center"><span className="text-neutral-500 text-sm">Don't have an account? </span><Link to="/register" className="text-neutral-900 font-medium text-sm hover:underline">Start here</Link></div>
                 </motion.div>
             </div>
             <div className="hidden lg:block w-[55%] relative bg-[#F1F5F9] overflow-hidden">
