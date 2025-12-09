@@ -1,9 +1,13 @@
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import config from './config.js'
+
+dotenv.config()
 
 const dataBase = async () => {
     console.log('mongoose file readed')
 
-    mongoose.connect('mongodb://127.0.0.1:27017/DRIVEOPS')
+    mongoose.connect(config.mongoURI)
         .then(() => console.log('Conncection with DB success'))
         .catch((error) => console.error('error catched: ', error))
 
