@@ -20,4 +20,14 @@ export const Login = async (req, res) => {
     }
 };
 
+export const ValidateToken = async (req, res) => {
+    try {
+        const { token } = req.body;
+        const isValid = await AuthService.verifyTokenAndRole(token);
+        res.status(200).json({ isValid });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 export default { Register, Login };
