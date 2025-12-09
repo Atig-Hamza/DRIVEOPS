@@ -55,15 +55,11 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 text-xs font-medium text-neutral-600 mb-8">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                v2.0 is now live
-              </div>
-              <h1 className="text-5xl md:text-7xl font-serif font-medium text-neutral-900 leading-[0.9] tracking-tight mb-8">
+              <h1 className="text-9xl font-serif font-medium text-neutral-900 leading-[0.9] tracking-tight mb-8">
                 Master <br />
                 <span className="text-neutral-400 italic">the</span> Motion.
               </h1>
-              <p className="text-xl text-neutral-600 max-w-md leading-relaxed mb-10 font-light tracking-wide">
+              <p className="text-2xl text-neutral-600 max-w-md leading-relaxed mb-10 font-light tracking-wide">
                 The operating system for modern logistics.
                 Orchestrate your entire fleet from a single, beautiful command center.
               </p>
@@ -235,8 +231,8 @@ const Hero = () => {
 
 const FeatureSection = ({ number, title, description, children, align = "right" }) => {
   return (
-    <div className="min-h-screen flex items-center py-20 border-t border-neutral-100/50 relative group">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 w-full grid lg:grid-cols-2 gap-24 items-center">
+    <div className="py-24 border-t border-neutral-100/50 relative group">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 w-full grid lg:grid-cols-2 gap-20 items-center">
         <div className={'flex flex-col justify-center ' + (align === "left" ? "lg:order-2" : "")}>
           <div className="flex items-center gap-4 mb-8">
             <span className="flex items-center justify-center w-10 h-10 rounded-full border border-neutral-200 text-sm font-mono text-neutral-500 bg-neutral-50">
@@ -266,9 +262,11 @@ const FeatureSection = ({ number, title, description, children, align = "right" 
         </div>
 
         <div className={`relative ${align === "left" ? "lg:order-1" : ""}`}>
-          <div className="absolute inset-0 bg-neutral-100/50 transform rotate-3 rounded-3xl z-0 scale-[0.95]"></div>
-          <div className="relative aspect-[4/3] bg-white rounded-3xl overflow-hidden border border-neutral-100 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.08)] z-10">
-            {children}
+          <div className="w-full max-w-xl mx-auto relative">
+            <div className="absolute inset-0 bg-neutral-100/50 transform rotate-3 rounded-3xl z-0 scale-[0.95]"></div>
+            <div className="relative aspect-[4/3] bg-white rounded-3xl overflow-hidden border border-neutral-100 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.08)] z-10">
+              {children}
+            </div>
           </div>
         </div>
       </div>
@@ -401,7 +399,7 @@ const Features = () => {
         description="Stop reacting to breakdowns. Our AI analyzes mileage and usage patterns to schedule service before issues occur."
         align="left"
       >
-        <div className="absolute inset-0 bg-[#0A0A0A] p-8 text-white flex flex-col justify-between">
+        <div className="absolute inset-0 bg-[#0A0A0A] p-6 text-white flex flex-col justify-between">
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 blur-[80px] rounded-full pointer-events-none"></div>
 
           <div className="flex justify-between items-start z-10">
@@ -414,8 +412,8 @@ const Features = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 z-10 my-8">
-            <div className="bg-white/5 rounded-2xl p-5 border border-white/5 hover:bg-white/10 transition-colors">
+          <div className="grid grid-cols-2 gap-4 z-10 my-6">
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/5 hover:bg-white/10 transition-colors">
               <div className="flex justify-between items-start mb-4">
                 <Battery className="w-5 h-5 text-neutral-400" />
                 <span className="text-xs font-bold text-green-400">GOOD</span>
@@ -423,7 +421,7 @@ const Features = () => {
               <div className="text-3xl font-mono font-medium">94%</div>
               <div className="text-xs text-neutral-500 mt-1">Battery Health</div>
             </div>
-            <div className="bg-orange-500/10 rounded-2xl p-5 border border-orange-500/20 relative overflow-hidden">
+            <div className="bg-orange-500/10 rounded-2xl p-4 border border-orange-500/20 relative overflow-hidden">
               <div className="flex justify-between items-start mb-4 relative z-10">
                 <Shield className="w-5 h-5 text-orange-400" />
                 <span className="text-xs font-bold text-orange-400 animate-pulse">ALERT</span>
@@ -438,7 +436,7 @@ const Features = () => {
               <span>Engine Temperature</span>
               <span>Normal Range</span>
             </div>
-            <div className="flex items-end gap-1 h-16">
+            <div className="flex items-end gap-1 h-12">
               {[40, 42, 45, 48, 42, 40, 45, 50, 55, 60, 58, 55, 50, 45, 40].map((h, i) => (
                 <motion.div
                   key={i}
@@ -451,7 +449,7 @@ const Features = () => {
             </div>
           </div>
 
-          <button className="w-full bg-white text-black font-semibold py-4 rounded-xl mt-6 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 z-10">
+          <button className="w-full bg-white text-black font-semibold py-3 rounded-xl mt-4 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 z-10 text-sm">
             Schedule Service
             <ArrowRight className="w-4 h-4" />
           </button>
@@ -571,29 +569,29 @@ const Testimonial = () => {
           <div className="grid grid-cols-2 gap-6">
             <motion.div
               whileHover={{ y: -5 }}
-              className="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10"
+              className="bg-white/5 backdrop-blur-sm p-6 rounded-3xl border border-white/10"
             >
-              <div className="text-4xl font-serif text-white mb-2">20%</div>
+              <div className="text-3xl font-serif text-white mb-2">20%</div>
               <div className="text-sm text-neutral-400 leading-relaxed">Reduction in fuel costs within first 3 months</div>
             </motion.div>
             <motion.div
               whileHover={{ y: -5 }}
-              className="bg-white text-neutral-900 p-8 rounded-3xl border border-white"
+              className="bg-white text-neutral-900 p-6 rounded-3xl border border-white"
             >
-              <div className="text-4xl font-serif mb-2">15hr</div>
+              <div className="text-3xl font-serif mb-2">15hr</div>
               <div className="text-sm text-neutral-500 leading-relaxed">Weekly admin time saved per dispatcher</div>
             </motion.div>
             <motion.div
               whileHover={{ y: -5 }}
-              className="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 col-span-2 flex items-center justify-between"
+              className="bg-white/5 backdrop-blur-sm p-6 rounded-3xl border border-white/10 col-span-2 flex items-center justify-between"
             >
               <div>
-                <div className="text-4xl font-serif text-white mb-2">99.9%</div>
+                <div className="text-3xl font-serif text-white mb-2">99.9%</div>
                 <div className="text-sm text-neutral-400">Uptime for critical fleet operations</div>
               </div>
               <div className="h-12 w-px bg-white/20"></div>
               <div className="text-right">
-                <div className="text-4xl font-serif text-white mb-2">ROI</div>
+                <div className="text-3xl font-serif text-white mb-2">ROI</div>
                 <div className="text-sm text-neutral-400">Positive in 45 days</div>
               </div>
             </motion.div>
