@@ -12,7 +12,7 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const truckControls = useAnimation();
-    const [journeyStep, setJourneyStep] = useState(0); 
+    const [journeyStep, setJourneyStep] = useState(0);
 
     useEffect(() => {
         const sequence = async () => {
@@ -25,7 +25,7 @@ const Login = () => {
                     transition: { duration: 12, ease: "linear" }
                 });
                 setJourneyStep(2);
-                await new Promise(r => setTimeout(r, 2000)); 
+                await new Promise(r => setTimeout(r, 2000));
             }
         };
         sequence();
@@ -42,10 +42,10 @@ const Login = () => {
             <div className="w-full lg:w-[45%] relative flex flex-col justify-center px-6 md:px-20 xl:px-32 z-20 bg-white border-r border-neutral-100">
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="absolute top-8 left-6 md:left-12">
                     <a href="/" className="text-2xl font-serif font-bold tracking-tighter text-neutral-900 flex items-center gap-2">
-                        <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center text-white">
-                            <Truck size={16} strokeWidth={2.5} />
+                        <div className="text-2xl font-serif font-bold tracking-tighter text-neutral-900 flex items-center gap-1">
+                            DriveOps
+                            <div className="w-2 h-2 rounded-full bg-neutral-900 mt-2"></div>
                         </div>
-                        DriveOps
                     </a>
                 </motion.div>
 
