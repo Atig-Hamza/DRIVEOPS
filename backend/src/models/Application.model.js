@@ -37,6 +37,10 @@ const applicationSchema = new mongoose.Schema({
 
 const Application = mongoose.model('Application', applicationSchema);
 
+export const GetApplicationByEmail = async (email) => {
+    return await Application.findOne({ Email: email });
+}
+
 export const GetAllApplication = async () => {
     return await Application.find();
 };
