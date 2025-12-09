@@ -35,7 +35,7 @@ export const verifyTokenAndRole = (token) => {
         const role = decoded.role;
         return { valid: true, role };
     } catch (error) {
-        return { valid: false, role: null };
+        throw new Error('Invalid token');
     }
 }
 
