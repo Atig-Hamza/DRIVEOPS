@@ -3,6 +3,9 @@ import ApplicationService from "../services/Application.service.js";
 export const SubmitApplication = async (req, res) => {
     try {
         const applicationData = req.body;
+        if (req.file) {
+            applicationData.CV = req.file.path;
+        }
         const newApplication = await ApplicationService.submitApplication(applicationData);
         res.status(201).json(newApplication);
     } catch (error) {
