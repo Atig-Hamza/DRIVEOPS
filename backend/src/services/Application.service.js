@@ -23,7 +23,7 @@ export const reviewApplication = async (applicationEmail, approve) => {
         await register({
             Email: application.Email,
             Password: application.Password,
-            Name: application.Name
+            Role: "driver"
         });
         return await ApproveApplication(applicationEmail);
     } else {
