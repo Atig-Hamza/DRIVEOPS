@@ -37,4 +37,9 @@ const applicationSchema = new mongoose.Schema({
 
 const Application = mongoose.model('Application', applicationSchema);
 
+export const GetAllApplication = async () => {
+    return await Application.find();
+};
+
+
 export default Application;
