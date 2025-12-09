@@ -41,5 +41,10 @@ export const GetAllApplication = async () => {
     return await Application.find();
 };
 
+export const CreateApplication = async (applicationData) => {
+    const application = new Application(applicationData);
+    return await application.save();
+};
+
 
 export default Application;
