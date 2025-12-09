@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ArrowRight, UploadCloud, FileText, X, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const Register = () => {
     const [cvFile, setCvFile] = useState(null);
     const fileInputRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -24,11 +27,62 @@ const Register = () => {
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => setIsLoading(false), 2000);
+        setError('');
+        
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append('Full_name', formData.name);
+            formDataToSend.append('Email', formData.email);
+            formDataToSend.append('Phone_number', formData.phone);
+            formDataToSend.append('Password', formData.password);
+            if (cvFile) {
+                formDataToSend.append('CV', cvFile);
+            }
+
+            const response = await axios.post('http://localhost:4000/api/applications', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Response:', response.data);
+            setSuccess(true);
+        } catch (error) {
+            console.error('Error submitting application:', error);
+            setError(error.response?.data?.message || 'Error submitting application');
+        } finally {
+            setIsLoading(false);
+        }
     };
+
+    if (success) {
+        return (
+            <div className="min-h-screen w-full bg-white flex flex-col items-center justify-center py-12 px-6 font-sans text-neutral-900">
+                <div className="w-full max-w-lg text-center mb-12">
+                    <a href="/" className="inline-flex items-center gap-2 mb-8">
+                        <div className="text-2xl font-serif font-bold tracking-tighter text-neutral-900 flex items-center gap-1">
+                            DriveOps
+                            <div className="w-2 h-2 rounded-full bg-neutral-900 mt-2"></div>
+                        </div>
+                    </a>
+                    <div className="bg-neutral-50 border border-neutral-200 p-8 text-center">
+                        <div className="w-16 h-16 bg-neutral-900 text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Truck size={32} />
+                        </div>
+                        <h2 className="text-2xl font-serif font-bold mb-4">Application Submitted</h2>
+                        <p className="text-neutral-600 mb-6">
+                            Thank you for applying to join our driver network. We have received your application and will review it shortly.
+                        </p>
+                        <Link to="/" className="inline-block bg-neutral-900 text-white px-8 py-3 font-medium hover:bg-neutral-800 transition-colors">
+                            Return Home
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen w-full bg-white flex flex-col items-center justify-center py-12 px-6 font-sans text-neutral-900">
@@ -45,6 +99,12 @@ const Register = () => {
                 </p>
             </div>
             <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-8">
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <strong className="font-bold">Error: </strong>
+                        <span className="block sm:inline">{error}</span>
+                    </div>
+                )}
                 <div className="flex flex-col">
                     <label className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-2">Full Name</label>
                     <input
