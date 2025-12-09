@@ -46,5 +46,13 @@ export const CreateApplication = async (applicationData) => {
     return await application.save();
 };
 
+export const ApproveApplication = async (applicationEmail) => {
+    return await Application.findOneAndUpdate(
+        { Email: applicationEmail },
+        { status: 'approved' },
+        { new: true }
+    );
+}
+
 
 export default Application;
