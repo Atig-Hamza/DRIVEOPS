@@ -1,10 +1,10 @@
 import React from 'react';
+import Sidebar from '../../components/SideBare';
 
 const Dashboard = () => {
     return (
-        <div>
-            <h1>Admin Dashboard</h1>
-            <p>This is the admin dashboard.</p>
+        <div className="min-h-screen bg-[#FAFAFA]">
+            <Sidebar />
         </div>
     );
 };
