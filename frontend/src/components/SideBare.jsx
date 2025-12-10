@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
     LayoutGrid,
     LineChart,
@@ -12,9 +12,23 @@ import {
 } from 'lucide-react';
 
 const SideBare = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [isPortfolioOpen, setIsPortfolioOpen] = useState(true);
     const [activeItem, setActiveItem] = useState('Dashboard');
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        const path = location.pathname.split('/').pop();
+        if (path) {
+            const formattedPath = path.charAt(0).toUpperCase() + path.slice(1);
+            setActiveItem(formattedPath);
+            
+            const isManagementItem = ['Overview', 'Applications', 'Assignment', 'Trucks', 'Trip'].includes(formattedPath);
+            if (isManagementItem) {
+                setIsPortfolioOpen(true);
+            }
+        }
+    }, [location]);
 
     const menuItems = [
         { id: 'Dashboard', icon: LayoutGrid, label: 'Dashboard' },
