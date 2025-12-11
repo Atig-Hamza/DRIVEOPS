@@ -53,8 +53,7 @@ const ApplicationRow = ({ id, name, email, phone, status, date, type, cv }) => {
             </div>
 
             <div className="hidden md:block w-[15%]">
-                <div className="text-sm font-medium text-neutral-900">{type}</div>
-                <div className="text-xs text-neutral-500 mt-0.5">Position</div>
+                <div className="text-sm font-medium text-neutral-900">Driver</div>
             </div>
 
             <div className="hidden md:block w-[15%]">
@@ -103,6 +102,7 @@ const ApplicationDash = () => {
                 });
                 setApplications(response.data);
                 setLoading(false);
+                console.log('Fetched applications:', response.data);
             } catch (err) {
                 console.error('Error fetching applications:', err);
                 setError('Failed to load applications');
@@ -118,7 +118,7 @@ const ApplicationDash = () => {
 
     return (
         <div className="p-8 w-full max-w-[1600px] mx-auto font-sans">
-            {/* Header */}
+        
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                 <div>
                     <h1 className="text-3xl font-serif font-bold text-neutral-900 tracking-tight">Applications</h1>
@@ -147,7 +147,7 @@ const ApplicationDash = () => {
                 </div>
             </div>
 
-            {/* Applications List */}
+        
             <div className="bg-white rounded-3xl border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
                 <div className="p-8 border-b border-neutral-100 flex justify-between items-center bg-white">
                     <div className="flex items-center gap-4">
@@ -175,12 +175,11 @@ const ApplicationDash = () => {
                             <ApplicationRow 
                                 key={app._id}
                                 id={app._id}
-                                name={`${app.firstName} ${app.lastName}`}
-                                email={app.email}
-                                phone={app.phone}
-                                status={app.status || 'Pending'}
+                                name={`${app.Full_name}`}
+                                email={app.Email}
+                                phone={app.Phone_number}
+                                status={app.status}
                                 date={app.createdAt}
-                                type={app.position || 'Driver'}
                                 cv={app.CV}
                             />
                         ))}
