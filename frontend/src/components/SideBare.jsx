@@ -36,7 +36,6 @@ const SideBare = () => {
     ];
 
     const managementItems = [
-        { id: 'Overview', label: 'Overview' },
         { id: 'Applications', label: 'Applications' },
         { id: 'Assignment', label: 'Assignment' },
         { id: 'Trucks', label: 'Trucks' },
