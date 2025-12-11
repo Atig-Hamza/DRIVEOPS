@@ -7,6 +7,7 @@ import AdminDashboard from './Pages/Admin/Dashboard';
 import DriverDashboard from './Pages/Driver/Dashboard';
 import AuthMiddleware from './middleware/AuthMiddleware.jsx';
 import Applications from './Pages/Admin/Application';
+import Trucks from './Pages/Admin/Trucks';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="/admin/dashboard" element={<AuthMiddleware><AdminDashboard /></AuthMiddleware>}  />
         <Route path="/admin/applications" element={<AuthMiddleware><Applications /></AuthMiddleware>} />
+        <Route path="/admin/trucks" element={<AuthMiddleware><Trucks /></AuthMiddleware>} />
         <Route path="/driver/dashboard" element={<AuthMiddleware><DriverDashboard /></AuthMiddleware>} />
       </Routes>
     </Router>
