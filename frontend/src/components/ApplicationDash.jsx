@@ -44,7 +44,7 @@ const ApplicationRow = ({ id, name, email, phone, status, date, type, cv }) => {
                     </div>
                 </div>
             </div>
-            
+
             <div className="hidden md:block w-[20%]">
                 <div className="flex items-center gap-2 text-sm text-neutral-600">
                     <Phone size={14} className="text-neutral-400" />
@@ -63,21 +63,22 @@ const ApplicationRow = ({ id, name, email, phone, status, date, type, cv }) => {
                 </div>
             </div>
 
+            <div>
+                <a
+                    href={cvUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm transition-all text-neutral-400 hover:text-neutral-900"
+                    title="View CV"
+                >
+                    <FileText size={18} />
+                </a>
+            </div>
+
             <div className="flex items-center justify-end gap-4 w-[20%]">
                 <div className={`px-3 py-1.5 rounded-full text-xs font-bold border ${getStatusStyle(status)}`}>
                     {status}
                 </div>
-                {cvUrl && (
-                    <a 
-                        href={cvUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm transition-all text-neutral-400 hover:text-neutral-900"
-                        title="View CV"
-                    >
-                        <FileText size={18} />
-                    </a>
-                )}
                 <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm transition-all text-neutral-400 hover:text-neutral-900">
                     <MoreHorizontal size={18} />
                 </button>
@@ -118,7 +119,7 @@ const ApplicationDash = () => {
 
     return (
         <div className="p-8 w-full max-w-[1600px] mx-auto font-sans">
-        
+
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                 <div>
                     <h1 className="text-3xl font-serif font-bold text-neutral-900 tracking-tight">Applications</h1>
@@ -130,9 +131,9 @@ const ApplicationDash = () => {
                 <div className="flex items-center gap-3">
                     <div className="relative hidden md:block group">
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-neutral-900 transition-colors" />
-                        <input 
-                            type="text" 
-                            placeholder="Search applicants..." 
+                        <input
+                            type="text"
+                            placeholder="Search applicants..."
                             className="pl-10 pr-4 py-3 bg-white border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent w-72 transition-all shadow-sm"
                         />
                     </div>
@@ -147,7 +148,7 @@ const ApplicationDash = () => {
                 </div>
             </div>
 
-        
+
             <div className="bg-white rounded-3xl border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
                 <div className="p-8 border-b border-neutral-100 flex justify-between items-center bg-white">
                     <div className="flex items-center gap-4">
@@ -160,19 +161,21 @@ const ApplicationDash = () => {
                         </button>
                     </div>
                 </div>
-                
+
                 <div className="p-4">
                     <div className="hidden md:flex items-center justify-between px-4 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-wider border-b border-neutral-50 mb-2">
-                        <div className="w-[30%]">Applicant</div>
-                        <div className="w-[20%]">Contact</div>
+                        <div className="w-[25%]">Applicant</div>
+                        <div className="w-[15%]">Contact</div>
                         <div className="w-[15%]">Position</div>
                         <div className="w-[15%]">Applied Date</div>
+                        <div>CV</div>
                         <div className="w-[20%] text-right pr-12">Status</div>
+                        <div className='w-[15]'>Actions</div>
                     </div>
 
                     <div className="space-y-1">
                         {applications.map((app) => (
-                            <ApplicationRow 
+                            <ApplicationRow
                                 key={app._id}
                                 id={app._id}
                                 name={`${app.Full_name}`}
@@ -190,7 +193,7 @@ const ApplicationDash = () => {
                         )}
                     </div>
                 </div>
-                
+
                 <div className="p-4 border-t border-neutral-100 bg-neutral-50/50 flex justify-center">
                     <button className="text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors">
                         Load More Applications
