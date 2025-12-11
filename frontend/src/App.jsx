@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="/admin/dashboard" element={<AuthMiddleware><AdminDashboard /></AuthMiddleware>} />
+        <Route path="/admin/dashboard" element={<AuthMiddleware><AdminDashboard /></AuthMiddleware>}  />
         <Route path="/admin/applications" element={<AuthMiddleware><Applications /></AuthMiddleware>} />
         <Route path="/driver/dashboard" element={<AuthMiddleware><DriverDashboard /></AuthMiddleware>} />
       </Routes>
