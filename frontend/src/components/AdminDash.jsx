@@ -106,17 +106,13 @@ const AdminDash = () => {
                         <Bell size={20} />
                         <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
                     </button>
-                    <button className="px-5 py-3 bg-neutral-900 text-white rounded-xl text-sm font-bold hover:bg-neutral-800 transition-all shadow-lg shadow-neutral-900/20 flex items-center gap-2">
-                        <Package size={18} />
-                        <span>New Shipment</span>
-                    </button>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 <StatCard 
                     title="Total Revenue" 
-                    value="$84,320.50" 
+                    value="$000.00" 
                     change="+12.5%" 
                     trend="up" 
                     icon={TrendingUp} 
