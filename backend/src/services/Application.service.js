@@ -20,11 +20,11 @@ export const reviewApplication = async (applicationEmail, approve) => {
         throw new Error('Application not found');
     }
     if (approve) {
-        await register({
-            Email: application.Email,
-            Password: application.Password,
-            Role: "driver"
-        });
+        await register(
+            application.Email,
+            application.Password,
+            "driver"
+        );
         return await ApproveApplication(applicationEmail);
     } else {
         return await RejectApplication(applicationEmail);
