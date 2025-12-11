@@ -18,33 +18,35 @@ import {
     Phone
 } from 'lucide-react';
 
-const ApplicationRow = ({ id, name, email, phone, status, date, type, cv }) => {
+const ApplicationRow = ({ id, name, email, phone, status, date, type, cv, onReview }) => {
     const getStatusStyle = (status) => {
-        switch (status) {
-            case 'Pending': return 'bg-orange-50 text-orange-700 border-orange-100';
-            case 'Approved': return 'bg-green-50 text-green-700 border-green-100';
-            case 'Rejected': return 'bg-red-50 text-red-700 border-red-100';
+        const normalizedStatus = status ? status.toLowerCase() : '';
+        switch (normalizedStatus) {
+            case 'pending': return 'bg-orange-50 text-orange-700 border-orange-100';
+            case 'approved': return 'bg-green-50 text-green-700 border-green-100';
+            case 'rejected': return 'bg-red-50 text-red-700 border-red-100';
             default: return 'bg-gray-50 text-gray-700 border-gray-100';
         }
     };
 
+    const displayStatus = status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : 'Unknown';
     const cvUrl = cv ? `http://localhost:4000/${cv.replace(/\\/g, '/')}` : null;
 
     return (
-        <div className="group flex items-center justify-between p-4 hover:bg-neutral-50 rounded-xl transition-all duration-200 border border-transparent hover:border-neutral-100">
-            <div className="flex items-center gap-4 w-[30%]">
-                <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center text-neutral-600 font-serif font-bold text-lg group-hover:bg-white group-hover:shadow-sm transition-all">
+        <div className="group flex items-center px-4 py-3 hover:bg-neutral-50 rounded-xl transition-all duration-200 border border-transparent hover:border-neutral-100">
+            <div className="flex items-center gap-4 w-[25%]">
+                <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center text-neutral-600 font-serif font-bold text-lg group-hover:bg-white group-hover:shadow-sm transition-all">
                     {name.charAt(0)}
                 </div>
-                <div>
-                    <h4 className="text-sm font-bold text-neutral-900 font-serif">{name}</h4>
-                    <div className="flex items-center gap-1.5 text-xs text-neutral-500 mt-1">
-                        <Mail size={12} />
-                        {email}
+                <div className="overflow-hidden">
+                    <h4 className="text-sm font-bold text-neutral-900 font-serif truncate">{name}</h4>
+                    <div className="flex items-center gap-1.5 text-xs text-neutral-500 mt-1 truncate">
+                        <Mail size={12} className="shrink-0" />
+                        <span className="truncate">{email}</span>
                     </div>
                 </div>
             </div>
-
+            
             <div className="hidden md:block w-[20%]">
                 <div className="flex items-center gap-2 text-sm text-neutral-600">
                     <Phone size={14} className="text-neutral-400" />
@@ -63,25 +65,47 @@ const ApplicationRow = ({ id, name, email, phone, status, date, type, cv }) => {
                 </div>
             </div>
 
-            <div>
-                <a
-                    href={cvUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm transition-all text-neutral-400 hover:text-neutral-900"
-                    title="View CV"
-                >
-                    <FileText size={18} />
-                </a>
+            <div className="w-[5%] flex justify-center">
+                {cvUrl ? (
+                    <a 
+                        href={cvUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm transition-all text-neutral-400 hover:text-neutral-900"
+                        title="View CV"
+                    >
+                        <FileText size={18} />
+                    </a>
+                ) : (
+                    <span className="text-neutral-300">-</span>
+                )}
             </div>
 
-            <div className="flex items-center justify-end gap-4 w-[20%]">
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold border ${getStatusStyle(status)}`}>
-                    {status}
+            <div className="w-[10%] flex justify-center">
+                <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${getStatusStyle(status)}`}>
+                    {displayStatus}
                 </div>
-                <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm transition-all text-neutral-400 hover:text-neutral-900">
-                    <MoreHorizontal size={18} />
-                </button>
+            </div>
+
+            <div className="w-[10%] flex justify-end gap-2">
+                {status === 'pending' && (
+                    <>
+                        <button 
+                            onClick={() => onReview(email, 'approved')}
+                            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-green-50 text-neutral-400 hover:text-green-600 transition-all"
+                            title="Approve"
+                        >
+                            <CheckCircle size={18} />
+                        </button>
+                        <button 
+                            onClick={() => onReview(email, 'rejected')}
+                            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-neutral-400 hover:text-red-600 transition-all"
+                            title="Reject"
+                        >
+                            <XCircle size={18} />
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
@@ -113,6 +137,24 @@ const ApplicationDash = () => {
 
         fetchApplications();
     }, []);
+
+    const handleReview = async (email, status) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put('http://localhost:4000/api/applications/review', 
+                { email, approve: status === 'approved' },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            
+            // Update local state
+            setApplications(apps => apps.map(app => 
+                app.Email === email ? { ...app, status } : app
+            ));
+        } catch (err) {
+            console.error('Error updating status:', err);
+            alert('Failed to update application status');
+        }
+    };
 
     if (loading) return <div className="p-8">Loading...</div>;
     if (error) return <div className="p-8 text-red-500">{error}</div>;
@@ -163,14 +205,14 @@ const ApplicationDash = () => {
                 </div>
 
                 <div className="p-4">
-                    <div className="hidden md:flex items-center justify-between px-4 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-wider border-b border-neutral-50 mb-2">
+                    <div className="hidden md:flex items-center px-4 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-wider border-b border-neutral-50 mb-2">
                         <div className="w-[25%]">Applicant</div>
-                        <div className="w-[15%]">Contact</div>
+                        <div className="w-[20%]">Contact</div>
                         <div className="w-[15%]">Position</div>
                         <div className="w-[15%]">Applied Date</div>
-                        <div>CV</div>
-                        <div className="w-[20%] text-right pr-12">Status</div>
-                        <div className='w-[15]'>Actions</div>
+                        <div className="w-[5%] text-center">CV</div>
+                        <div className="w-[10%] text-center">Status</div>
+                        <div className="w-[10%] text-right">Actions</div>
                     </div>
 
                     <div className="space-y-1">
@@ -184,6 +226,7 @@ const ApplicationDash = () => {
                                 status={app.status}
                                 date={app.createdAt}
                                 cv={app.CV}
+                                onReview={handleReview}
                             />
                         ))}
                         {applications.length === 0 && (
