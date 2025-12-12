@@ -11,6 +11,7 @@ import Trucks from './Pages/Admin/Trucks';
 import Trips from './Pages/Admin/Trips';
 import Drivers from './Pages/Admin/Drivers';
 import Traking from './Pages/Admin/Tracking.jsx';
+import NotFound from './Pages/404';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/admin/drivers" element={<AuthMiddleware><Drivers /></AuthMiddleware>} />
         <Route path="/admin/tracking" element={<AuthMiddleware><Traking /></AuthMiddleware>} />
         <Route path="/driver/dashboard" element={<AuthMiddleware><DriverDashboard /></AuthMiddleware>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
