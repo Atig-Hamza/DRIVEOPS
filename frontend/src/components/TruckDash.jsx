@@ -21,11 +21,11 @@ import {
 const TireStatusVisual = ({ tiers }) => {
     const getTireColor = (condition) => {
         switch (condition) {
-            case 'New': return '#3B82F6'; // blue-500
-            case 'Good': return '#22C55E'; // green-500
-            case 'Worn': return '#EAB308'; // yellow-500
-            case 'Needs Replacement': return '#EF4444'; // red-500
-            default: return '#D1D5DB'; // gray-300
+            case 'New': return '#3B82F6';
+            case 'Good': return '#22C55E';
+            case 'Worn': return '#EAB308'; 
+            case 'Needs Replacement': return '#EF4444'; 
+            default: return '#D1D5DB'; 
         }
     };
 
@@ -33,7 +33,6 @@ const TireStatusVisual = ({ tiers }) => {
 
     return (
         <div className="relative w-12 h-16 mx-auto group/tire cursor-help">
-            {/* Tooltip */}
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/tire:block w-48 bg-neutral-900 text-white text-xs rounded-lg p-2 z-10 shadow-xl">
                 <div className="font-bold mb-1 border-b border-neutral-700 pb-1">Tire Status</div>
                 <div className="grid grid-cols-2 gap-x-2 gap-y-1">
