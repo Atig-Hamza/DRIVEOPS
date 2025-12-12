@@ -16,10 +16,18 @@ const tripSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    start_coordinates: {
+        lat: { type: Number },
+        lng: { type: Number }
+    },
     end_location: {
         type: String,
         required: true,
         trim: true,
+    },
+    end_coordinates: {
+        lat: { type: Number },
+        lng: { type: Number }
     },
     start_time: {
         type: Date,
