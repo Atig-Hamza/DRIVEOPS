@@ -18,6 +18,65 @@ import {
     X
 } from 'lucide-react';
 
+const TireStatusVisual = ({ tiers }) => {
+    const getTireColor = (condition) => {
+        switch (condition) {
+            case 'New': return '#3B82F6'; // blue-500
+            case 'Good': return '#22C55E'; // green-500
+            case 'Worn': return '#EAB308'; // yellow-500
+            case 'Needs Replacement': return '#EF4444'; // red-500
+            default: return '#D1D5DB'; // gray-300
+        }
+    };
+
+    const getTireByPosition = (pos) => tiers?.find(t => t.position === pos)?.condition;
+
+    return (
+        <div className="relative w-12 h-16 mx-auto group/tire cursor-help">
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/tire:block w-48 bg-neutral-900 text-white text-xs rounded-lg p-2 z-10 shadow-xl">
+                <div className="font-bold mb-1 border-b border-neutral-700 pb-1">Tire Status</div>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full" style={{backgroundColor: getTireColor(getTireByPosition('Front Left'))}}></div> FL</div>
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full" style={{backgroundColor: getTireColor(getTireByPosition('Front Right'))}}></div> FR</div>
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full" style={{backgroundColor: getTireColor(getTireByPosition('Rear Left'))}}></div> RL</div>
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full" style={{backgroundColor: getTireColor(getTireByPosition('Rear Right'))}}></div> RR</div>
+                </div>
+            </div>
+
+            {/* Truck Body */}
+            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-6 h-16 bg-neutral-200 rounded-md border border-neutral-300"></div>
+            
+            {/* Cab */}
+            <div className="absolute left-1/2 top-1 -translate-x-1/2 w-4 h-4 bg-neutral-300 rounded-sm border border-neutral-400"></div>
+
+            {/* Front Left Tire */}
+            <div 
+                className="absolute left-1 top-2 w-2 h-4 rounded-sm border border-black/10 transition-colors"
+                style={{ backgroundColor: getTireColor(getTireByPosition('Front Left')) }}
+            ></div>
+
+            {/* Front Right Tire */}
+            <div 
+                className="absolute right-1 top-2 w-2 h-4 rounded-sm border border-black/10 transition-colors"
+                style={{ backgroundColor: getTireColor(getTireByPosition('Front Right')) }}
+            ></div>
+
+            {/* Rear Left Tire */}
+            <div 
+                className="absolute left-1 bottom-2 w-2 h-4 rounded-sm border border-black/10 transition-colors"
+                style={{ backgroundColor: getTireColor(getTireByPosition('Rear Left')) }}
+            ></div>
+
+            {/* Rear Right Tire */}
+            <div 
+                className="absolute right-1 bottom-2 w-2 h-4 rounded-sm border border-black/10 transition-colors"
+                style={{ backgroundColor: getTireColor(getTireByPosition('Rear Right')) }}
+            ></div>
+        </div>
+    );
+};
+
 const TruckRow = ({ truck, onEdit, onDelete }) => {
     const getStatusStyle = (status) => {
         switch (status) {
@@ -29,9 +88,19 @@ const TruckRow = ({ truck, onEdit, onDelete }) => {
         }
     };
 
+    const getTierColor = (condition) => {
+        switch (condition) {
+            case 'New': return 'bg-blue-500';
+            case 'Good': return 'bg-green-500';
+            case 'Worn': return 'bg-yellow-500';
+            case 'Needs Replacement': return 'bg-red-500';
+            default: return 'bg-gray-300';
+        }
+    };
+
     return (
         <div className="group flex items-center px-4 py-3 hover:bg-neutral-50 rounded-xl transition-all duration-200 border border-transparent hover:border-neutral-100">
-            <div className="flex items-center gap-4 w-[25%]">
+            <div className="flex items-center gap-4 w-[20%]">
                 <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center text-neutral-600 group-hover:bg-white group-hover:shadow-sm transition-all">
                     <Truck size={20} />
                 </div>
@@ -43,23 +112,31 @@ const TruckRow = ({ truck, onEdit, onDelete }) => {
                 </div>
             </div>
             
-            <div className="hidden md:block w-[15%]">
+            <div className="hidden md:block w-[12%]">
                 <div className="text-sm font-medium text-neutral-900">{truck.type}</div>
                 <div className="text-xs text-neutral-500 mt-0.5">{truck.year}</div>
             </div>
 
-            <div className="hidden md:block w-[15%]">
+            <div className="hidden md:block w-[12%]">
                 <div className="flex items-center gap-1.5 text-sm text-neutral-600">
                     <Fuel size={14} className="text-neutral-400" />
                     {truck.fuel_type}
                 </div>
             </div>
 
-            <div className="hidden md:block w-[15%]">
+            <div className="hidden md:block w-[12%]">
                 <div className="flex items-center gap-1.5 text-sm text-neutral-600">
                     <Gauge size={14} className="text-neutral-400" />
                     {truck.current_mileage.toLocaleString()} km
                 </div>
+            </div>
+
+            <div className="hidden md:flex w-[14%] justify-center items-center">
+                {truck.tiers && truck.tiers.length > 0 ? (
+                    <TireStatusVisual tiers={truck.tiers} />
+                ) : (
+                    <span className="text-xs text-neutral-400">No tiers</span>
+                )}
             </div>
 
             <div className="w-[15%] flex justify-center">
@@ -199,13 +276,18 @@ const TruckModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Type</label>
-                            <input 
-                                type="text" 
-                                required
+                            <select 
                                 className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 transition-all"
                                 value={formData.type}
                                 onChange={e => setFormData({...formData, type: e.target.value})}
-                            />
+                            >
+                                <option value="">Select Type</option>
+                                <option value="Semi-Trailer">Semi-Trailer</option>
+                                <option value="Box Truck">Box Truck</option>
+                                <option value="Flatbed">Flatbed</option>
+                                <option value="Tanker">Tanker</option>
+                                <option value="Dump Truck">Dump Truck</option>
+                            </select>
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Capacity (kg)</label>
@@ -440,10 +522,11 @@ const TruckDash = () => {
                 
                 <div className="p-4">
                     <div className="hidden md:flex items-center px-4 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-wider border-b border-neutral-50 mb-2">
-                        <div className="w-[25%]">Vehicle Info</div>
-                        <div className="w-[15%]">Type/Year</div>
-                        <div className="w-[15%]">Fuel</div>
-                        <div className="w-[15%]">Mileage</div>
+                        <div className="w-[20%]">Vehicle Info</div>
+                        <div className="w-[12%]">Type/Year</div>
+                        <div className="w-[12%]">Fuel</div>
+                        <div className="w-[12%]">Mileage</div>
+                        <div className="w-[14%]">Tires</div>
                         <div className="w-[15%] text-center">Status</div>
                         <div className="w-[15%] text-right">Actions</div>
                     </div>
