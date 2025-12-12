@@ -5,6 +5,7 @@ import truckRoutes from './truck.routes.js';
 import tierRoutes from './tier.routes.js';
 import tripRoutes from './trip.routes.js';
 import userRoutes from './user.routes.js';
+import dashboardRoutes from './dashboard.routes.js';
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use('/trucks', truckRoutes);
 router.use('/tiers', tierRoutes);
 router.use('/trips', tripRoutes);
 router.use('/users', userRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 export default router;
