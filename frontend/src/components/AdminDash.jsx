@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { motion } from 'framer-motion';
 import {
     TrendingUp,
@@ -13,7 +14,8 @@ import {
     Search,
     Bell,
     Truck,
-    Calendar
+    Calendar,
+    FileText
 } from 'lucide-react';
 
 const StatCard = ({ title, value, change, trend, icon: Icon, isDark = false }) => (
@@ -32,14 +34,14 @@ const StatCard = ({ title, value, change, trend, icon: Icon, isDark = false }) =
             }`}>
                 <Icon size={24} />
             </div>
-            <div className={`flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-full ${
+            {/* <div className={`flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-full ${
                 trend === 'up' 
                     ? (isDark ? 'bg-green-500/20 text-green-400' : 'bg-green-50 text-green-600')
                     : (isDark ? 'bg-red-500/20 text-red-400' : 'bg-red-50 text-red-600')
             }`}>
                 {trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
                 {change}
-            </div>
+            </div> */}
         </div>
         <div>
             <h3 className={`text-sm font-medium mb-2 ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>{title}</h3>
@@ -68,8 +70,9 @@ const RecentShipmentRow = ({ id, destination, status, driver, time }) => (
                 <p className="text-xs text-neutral-500 mt-0.5">Driver</p>
             </div>
             <div className={`px-3 py-1.5 rounded-full text-xs font-bold border ${
-                status === 'In Transit' ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                status === 'Delivered' ? 'bg-neutral-900 text-white border-neutral-900' :
+                status === 'In Progress' ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                status === 'Completed' ? 'bg-neutral-900 text-white border-neutral-900' :
+                status === 'Planned' ? 'bg-yellow-50 text-yellow-700 border-yellow-100' :
                 'bg-orange-50 text-orange-700 border-orange-100'
             }`}>
                 {status}
@@ -82,6 +85,41 @@ const RecentShipmentRow = ({ id, destination, status, driver, time }) => (
 );
 
 const AdminDash = () => {
+    const [stats, setStats] = useState({
+        pendingApplications: 0,
+        activeTrips: 0,
+        totalDrivers: 0,
+        maintenanceTrucks: 0,
+        recentTrips: [],
+        fleetStatus: {
+            available: 0,
+            inUse: 0,
+            maintenance: 0,
+            retired: 0
+        }
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:4000/api/dashboard/stats', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setStats(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching dashboard stats:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, []);
+
+    if (loading) return <div className="p-8">Loading...</div>;
+
     return (
         <div className="p-8 w-full max-w-[1600px] mx-auto font-sans">
             
@@ -111,31 +149,31 @@ const AdminDash = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 <StatCard 
-                    title="Total Revenue" 
-                    value="$000.00" 
-                    change="+12.5%" 
+                    title="Pending Applications" 
+                    value={stats.pendingApplications} 
+                    change="" 
                     trend="up" 
-                    icon={TrendingUp} 
+                    icon={FileText} 
                     isDark={true}
                 />
                 <StatCard 
-                    title="Active Shipments" 
-                    value="1,284" 
-                    change="+8.2%" 
+                    title="Active Trips" 
+                    value={stats.activeTrips} 
+                    change="" 
                     trend="up" 
                     icon={Package} 
                 />
                 <StatCard 
                     title="Active Drivers" 
-                    value="42" 
-                    change="+4.2%" 
+                    value={stats.totalDrivers} 
+                    change="" 
                     trend="up" 
-                    icon={Truck} 
+                    icon={Users} 
                 />
                 <StatCard 
-                    title="Pending Issues" 
-                    value="3" 
-                    change="-2.4%" 
+                    title="Maintenance Trucks" 
+                    value={stats.maintenanceTrucks} 
+                    change="" 
                     trend="down" 
                     icon={AlertCircle} 
                 />
@@ -147,7 +185,7 @@ const AdminDash = () => {
                 <div className="lg:col-span-2 bg-white rounded-3xl border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
                     <div className="p-8 border-b border-neutral-100 flex justify-between items-center bg-white">
                         <div>
-                            <h2 className="text-xl font-serif font-bold text-neutral-900">Recent Shipments</h2>
+                            <h2 className="text-xl font-serif font-bold text-neutral-900">Recent Trips</h2>
                             <p className="text-sm text-neutral-500 mt-1">Track and manage your latest deliveries</p>
                         </div>
                         <button className="px-4 py-2 bg-neutral-50 hover:bg-neutral-100 text-neutral-900 text-sm font-medium rounded-lg transition-colors">
@@ -155,41 +193,19 @@ const AdminDash = () => {
                         </button>
                     </div>
                     <div className="p-4 flex-1">
-                        <RecentShipmentRow 
-                            id="#TRK-2491" 
-                            destination="New York, NY" 
-                            status="In Transit" 
-                            driver="Mike Ross" 
-                            time="2h ago" 
-                        />
-                        <RecentShipmentRow 
-                            id="#TRK-2492" 
-                            destination="Los Angeles, CA" 
-                            status="Pending" 
-                            driver="Harvey Specter" 
-                            time="4h ago" 
-                        />
-                        <RecentShipmentRow 
-                            id="#TRK-2493" 
-                            destination="Chicago, IL" 
-                            status="Delivered" 
-                            driver="Louis Litt" 
-                            time="5h ago" 
-                        />
-                        <RecentShipmentRow 
-                            id="#TRK-2494" 
-                            destination="Miami, FL" 
-                            status="In Transit" 
-                            driver="Rachel Zane" 
-                            time="6h ago" 
-                        />
-                        <RecentShipmentRow 
-                            id="#TRK-2495" 
-                            destination="Seattle, WA" 
-                            status="Delivered" 
-                            driver="Donna Paulsen" 
-                            time="1d ago" 
-                        />
+                        {stats.recentTrips.map((trip) => (
+                            <RecentShipmentRow 
+                                key={trip._id}
+                                id={`#TRP-${trip._id.slice(-4)}`}
+                                destination={trip.end_location}
+                                status={trip.status}
+                                driver={trip.driver_id?.email || 'Unassigned'}
+                                time={new Date(trip.createdAt).toLocaleDateString()}
+                            />
+                        ))}
+                        {stats.recentTrips.length === 0 && (
+                            <div className="text-center py-8 text-neutral-500">No recent trips</div>
+                        )}
                     </div>
                 </div>
 
@@ -202,10 +218,10 @@ const AdminDash = () => {
                             <div className="flex justify-between items-start mb-8">
                                 <div>
                                     <h3 className="font-serif font-bold text-xl mb-1">Fleet Status</h3>
-                                    <p className="text-neutral-400 text-sm">Real-time driver availability</p>
+                                    <p className="text-neutral-400 text-sm">Real-time vehicle availability</p>
                                 </div>
                                 <div className="p-2 bg-white/10 rounded-lg">
-                                    <Users size={20} className="text-white" />
+                                    <Truck size={20} className="text-white" />
                                 </div>
                             </div>    
                             <div className="space-y-6">
@@ -213,12 +229,25 @@ const AdminDash = () => {
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-3">
                                             <div className="w-2 h-2 bg-green-400 rounded-full shadow-[0_0_8px_rgba(74,222,128,0.5)] animate-pulse"></div>
-                                            <span className="text-sm font-medium text-neutral-200">On the road</span>
+                                            <span className="text-sm font-medium text-neutral-200">Available</span>
                                         </div>
-                                        <span className="font-bold font-serif text-lg">28</span>
+                                        <span className="font-bold font-serif text-lg">{stats.fleetStatus.available}</span>
                                     </div>
                                     <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                                        <div className="bg-green-400 h-full w-[70%] rounded-full"></div>
+                                        <div className="bg-green-400 h-full rounded-full" style={{ width: `${(stats.fleetStatus.available / (Object.values(stats.fleetStatus).reduce((a, b) => a + b, 0) || 1)) * 100}%` }}></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                            <span className="text-sm font-medium text-neutral-200">In Use</span>
+                                        </div>
+                                        <span className="font-bold font-serif text-lg">{stats.fleetStatus.inUse}</span>
+                                    </div>
+                                    <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-blue-400 h-full rounded-full" style={{ width: `${(stats.fleetStatus.inUse / (Object.values(stats.fleetStatus).reduce((a, b) => a + b, 0) || 1)) * 100}%` }}></div>
                                     </div>
                                 </div>
 
@@ -226,25 +255,12 @@ const AdminDash = () => {
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-3">
                                             <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                                            <span className="text-sm font-medium text-neutral-200">Loading</span>
+                                            <span className="text-sm font-medium text-neutral-200">Maintenance</span>
                                         </div>
-                                        <span className="font-bold font-serif text-lg">8</span>
+                                        <span className="font-bold font-serif text-lg">{stats.fleetStatus.maintenance}</span>
                                     </div>
                                     <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                                        <div className="bg-orange-400 h-full w-[20%] rounded-full"></div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-2 h-2 bg-neutral-500 rounded-full"></div>
-                                            <span className="text-sm font-medium text-neutral-200">Idle</span>
-                                        </div>
-                                        <span className="font-bold font-serif text-lg">6</span>
-                                    </div>
-                                    <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                                        <div className="bg-neutral-500 h-full w-[15%] rounded-full"></div>
+                                        <div className="bg-orange-400 h-full rounded-full" style={{ width: `${(stats.fleetStatus.maintenance / (Object.values(stats.fleetStatus).reduce((a, b) => a + b, 0) || 1)) * 100}%` }}></div>
                                     </div>
                                 </div>
                             </div>
