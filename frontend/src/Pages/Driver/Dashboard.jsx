@@ -17,7 +17,8 @@ import {
     LogOut,
     ChevronRight,
     Menu,
-    X
+    X,
+    Wrench
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,6 +49,156 @@ const MapController = ({ bounds }) => {
         }
     }, [bounds, map]);
     return null;
+};
+
+const TireModal = ({ isOpen, onClose, truckId }) => {
+    const [tiers, setTiers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedTire, setSelectedTire] = useState(null);
+
+    useEffect(() => {
+        if (isOpen) {
+            if (truckId) {
+                setLoading(true);
+                fetchTiers();
+            } else {
+                setLoading(false);
+            }
+        }
+    }, [isOpen, truckId]);
+
+    const fetchTiers = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get(`http://localhost:4000/api/tiers/truck/${truckId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setTiers(res.data);
+            setLoading(false);
+        } catch (err) {
+            console.error("Error fetching tiers:", err);
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateCondition = async (condition) => {
+        if (!selectedTire) return;
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`http://localhost:4000/api/tiers/${selectedTire._id}`, 
+                { condition },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            fetchTiers();
+            setSelectedTire(null);
+        } catch (err) {
+            console.error("Error updating tier:", err);
+        }
+    };
+
+    const getTireColor = (condition) => {
+        switch (condition) {
+            case 'New': return '#3B82F6';
+            case 'Good': return '#22C55E';
+            case 'Worn': return '#EAB308'; 
+            case 'Needs Replacement': return '#EF4444'; 
+            default: return '#D1D5DB'; 
+        }
+    };
+
+    const getTireByPosition = (pos) => tiers.find(t => t.position === pos);
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden"
+            >
+                <div className="p-6 border-b border-neutral-100 flex justify-between items-center">
+                    <h2 className="text-xl font-serif font-bold text-neutral-900">Vehicle Status</h2>
+                    <button onClick={onClose} className="p-2 hover:bg-neutral-50 rounded-full transition-colors">
+                        <X size={20} className="text-neutral-400" />
+                    </button>
+                </div>
+
+                <div className="p-8 flex flex-col items-center">
+                    {loading ? (
+                        <div className="py-10 text-neutral-400">Loading vehicle data...</div>
+                    ) : !truckId ? (
+                        <div className="py-10 text-center">
+                            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Truck size={32} className="text-neutral-400" />
+                            </div>
+                            <p className="text-neutral-500 font-medium">No truck assigned to current mission.</p>
+                        </div>
+                    ) : (
+                        <div className="relative w-32 h-48">
+                            {/* Truck Body */}
+                            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-16 h-40 bg-neutral-100 rounded-xl border-2 border-neutral-200"></div>
+                            <div className="absolute left-1/2 top-2 -translate-x-1/2 w-12 h-10 bg-neutral-200 rounded-lg border border-neutral-300"></div>
+
+                            {/* Tires */}
+                            {['Front Left', 'Front Right', 'Rear Left', 'Rear Right'].map(pos => {
+                                const tier = getTireByPosition(pos);
+                                const isSelected = selectedTire?._id === tier?._id;
+                                
+                                let style = {};
+                                if (pos === 'Front Left') style = { left: -10, top: 10 };
+                                if (pos === 'Front Right') style = { right: -10, top: 10 };
+                                if (pos === 'Rear Left') style = { left: -10, bottom: 10 };
+                                if (pos === 'Rear Right') style = { right: -10, bottom: 10 };
+
+                                return (
+                                    <button
+                                        key={pos}
+                                        onClick={() => setSelectedTire(tier)}
+                                        className={`absolute w-6 h-10 rounded-md border-2 transition-all ${isSelected ? 'ring-2 ring-neutral-900 scale-110' : ''}`}
+                                        style={{ 
+                                            ...style, 
+                                            backgroundColor: getTireColor(tier?.condition),
+                                            borderColor: 'rgba(0,0,0,0.1)'
+                                        }}
+                                    />
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    <div className="mt-8 w-full">
+                        {selectedTire ? (
+                            <div className="space-y-3">
+                                <p className="text-center font-bold text-neutral-900 mb-4">
+                                    Update {selectedTire.position} Tire
+                                </p>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {['Good', 'Worn', 'Needs Replacement'].map(status => (
+                                        <button
+                                            key={status}
+                                            onClick={() => handleUpdateCondition(status)}
+                                            className={`p-3 rounded-xl text-sm font-bold border transition-all ${
+                                                selectedTire.condition === status 
+                                                    ? 'bg-neutral-900 text-white border-neutral-900' 
+                                                    : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                                            }`}
+                                        >
+                                            {status}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-center text-neutral-400 text-sm">
+                                Tap a tire to update its condition
+                            </p>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
+        </div>
+    );
 };
 
 const StatCard = ({ label, value, icon: Icon, color }) => (
@@ -113,7 +264,30 @@ const DriverDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [selectedTrip, setSelectedTrip] = useState(null);
     const [showMobileMap, setShowMobileMap] = useState(false);
+    const [isTireModalOpen, setIsTireModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    const handleCompleteTrip = async () => {
+        if (!selectedTrip) return;
+        if (window.confirm('Are you sure you want to mark this trip as completed?')) {
+            try {
+                const token = localStorage.getItem('token');
+                await axios.put(`http://localhost:4000/api/trips/${selectedTrip._id}`, 
+                    { status: 'Completed' },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                
+                const res = await axios.get('http://localhost:4000/api/dashboard/driver-stats', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setData(res.data);
+                setSelectedTrip(null);
+            } catch (err) {
+                console.error(err);
+                alert('Failed to complete trip');
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -143,8 +317,8 @@ const DriverDashboard = () => {
         navigate('/login');
     };
 
-    const openNavigation = (lat, lng) => {
-        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+    const openNavigation = (startLat, startLng, endLat, endLng) => {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${endLat},${endLng}&waypoints=${startLat},${startLng}`, '_blank');
     };
 
     const getTripBounds = (trip) => {
@@ -173,9 +347,18 @@ const DriverDashboard = () => {
                                 <span className="text-xs text-neutral-500">Driver Portal</span>
                             </div>
                         </div>
-                        <button onClick={handleLogout} className="p-2 hover:bg-neutral-50 rounded-full text-neutral-400 hover:text-red-500 transition-colors">
-                            <LogOut size={20} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button 
+                                onClick={() => setIsTireModalOpen(true)}
+                                className="p-2 hover:bg-neutral-50 rounded-full text-neutral-400 hover:text-neutral-900 transition-colors"
+                                title="Vehicle Status"
+                            >
+                                <Wrench size={20} />
+                            </button>
+                            <button onClick={handleLogout} className="p-2 hover:bg-neutral-50 rounded-full text-neutral-400 hover:text-red-500 transition-colors">
+                                <LogOut size={20} />
+                            </button>
+                        </div>
                     </div>
 
                     
@@ -311,18 +494,23 @@ const DriverDashboard = () => {
                                     
                                     <div className="flex gap-3">
                                         <button 
-                                            onClick={() => openNavigation(selectedTrip.start_coordinates.lat, selectedTrip.start_coordinates.lng)}
-                                            className="flex-1 md:flex-none px-6 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-900 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                                            onClick={() => openNavigation(
+                                                selectedTrip.start_coordinates.lat, 
+                                                selectedTrip.start_coordinates.lng,
+                                                selectedTrip.end_coordinates.lat, 
+                                                selectedTrip.end_coordinates.lng
+                                            )}
+                                            className="px-4 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-900 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                                            title="Navigate Route (Pickup -> Dropoff)"
                                         >
                                             <Navigation size={16} />
-                                            To Pickup
                                         </button>
                                         <button 
-                                            onClick={() => openNavigation(selectedTrip.end_coordinates.lat, selectedTrip.end_coordinates.lng)}
-                                            className="flex-1 md:flex-none px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl font-bold text-sm transition-colors shadow-lg shadow-neutral-900/20 flex items-center justify-center gap-2"
+                                            onClick={handleCompleteTrip}
+                                            className="flex-1 px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl font-bold text-sm transition-colors shadow-lg shadow-neutral-900/20 flex items-center justify-center gap-2"
                                         >
-                                            <Navigation size={16} />
-                                            Start Trip
+                                            <CheckCircle size={16} />
+                                            Complete Trip
                                         </button>
                                     </div>
                                 </div>
@@ -338,6 +526,12 @@ const DriverDashboard = () => {
                     </div>
                 )}
             </div>
+
+            <TireModal 
+                isOpen={isTireModalOpen} 
+                onClose={() => setIsTireModalOpen(false)} 
+                truckId={selectedTrip?.truck_id?._id || data?.currentTrip?.truck_id?._id}
+            />
         </div>
     );
 };
