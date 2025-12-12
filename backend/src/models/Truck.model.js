@@ -31,6 +31,7 @@ const truckSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+        enum: ["Semi-Trailer", "Box Truck", "Flatbed", "Tanker", "Dump Truck"],
     },
     capacity_kg: {
         type: Number,
@@ -82,8 +83,16 @@ const truckSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
+truckSchema.virtual('tiers', {
+    ref: 'Tier',
+    localField: '_id',
+    foreignField: 'truck_id'
+});
 
 const Truck = mongoose.model("Truck", truckSchema);
 
@@ -93,11 +102,11 @@ export const CreateTruck = async (truckData) => {
 }
 
 export const GetAllTrucks = async () => {
-    return await Truck.find();
+    return await Truck.find().populate('tiers');
 }
 
 export const GetTruckById = async (truckId) => {
-    return await Truck.findById(truckId);
+    return await Truck.findById(truckId).populate('tiers');
 }
 
 export const UpdateTruck = async (truckId, updateData) => {
