@@ -1,8 +1,22 @@
 import * as TruckModel from '../models/Truck.model.js';
+import * as TierModel from '../models/Tier.model.js';
 
 export const createTruck = async (truckData) => {
     try {
-        return await TruckModel.CreateTruck(truckData);
+        const truck = await TruckModel.CreateTruck(truckData);
+        
+        const positions = ["Front Left", "Front Right", "Rear Left", "Rear Right"];
+        const tierPromises = positions.map(position => {
+            return TierModel.CreateTier({
+                position: position,
+                condition: "Good",
+                truck_id: truck._id
+            });
+        });
+        
+        await Promise.all(tierPromises);
+        
+        return truck;
     } catch (error) {
         throw new Error(`Error creating truck: ${error.message}`);
     }
