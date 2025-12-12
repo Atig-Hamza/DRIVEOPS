@@ -50,4 +50,39 @@ export const GetDashboardStats = async (req, res) => {
     }
 };
 
+export const GetDriverDashboardStats = async (req, res) => {
+    try {
+        const driverId = req.user.userId;
+
+        const [
+            currentTrip,
+            upcomingTrips,
+            completedTripsCount,
+            totalTripsCount
+        ] = await Promise.all([
+            Trip.findOne({ driver_id: driverId, status: 'In Progress' })
+                .populate('truck_id')
+                .sort({ start_time: 1 }),
+            Trip.find({ driver_id: driverId, status: 'Planned' })
+                .populate('truck_id')
+                .sort({ start_time: 1 })
+                .limit(3),
+            Trip.countDocuments({ driver_id: driverId, status: 'Completed' }),
+            Trip.countDocuments({ driver_id: driverId })
+        ]);
+
+        res.status(200).json({
+            currentTrip,
+            upcomingTrips,
+            stats: {
+                completed: completedTripsCount,
+                total: totalTripsCount,
+                efficiency: totalTripsCount > 0 ? Math.round((completedTripsCount / totalTripsCount) * 100) : 0
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export default { GetDashboardStats };
