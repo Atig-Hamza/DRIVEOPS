@@ -16,6 +16,7 @@ import {
     Trash2
 } from 'lucide-react';
 import Sidebar from '../../components/SideBare';
+import LocationPicker from '../../components/LocationPicker';
 
 const TripRow = ({ trip, onEdit, onDelete }) => {
     const getStatusStyle = (status) => {
@@ -120,7 +121,9 @@ const TripRow = ({ trip, onEdit, onDelete }) => {
 const TripModal = ({ isOpen, onClose, onSubmit, initialData, trucks, drivers }) => {
     const [formData, setFormData] = useState({
         start_location: '',
+        start_coordinates: null,
         end_location: '',
+        end_coordinates: null,
         start_time: '',
         end_time: '',
         driver_id: '',
@@ -136,12 +139,16 @@ const TripModal = ({ isOpen, onClose, onSubmit, initialData, trucks, drivers }) 
                 start_time: initialData.start_time ? new Date(initialData.start_time).toISOString().slice(0, 16) : '',
                 end_time: initialData.end_time ? new Date(initialData.end_time).toISOString().slice(0, 16) : '',
                 driver_id: initialData.driver_id?._id || initialData.driver_id,
-                truck_id: initialData.truck_id?._id || initialData.truck_id
+                truck_id: initialData.truck_id?._id || initialData.truck_id,
+                start_coordinates: initialData.start_coordinates,
+                end_coordinates: initialData.end_coordinates
             });
         } else {
             setFormData({
                 start_location: '',
+                start_coordinates: null,
                 end_location: '',
+                end_coordinates: null,
                 start_time: '',
                 end_time: '',
                 driver_id: '',
@@ -165,9 +172,9 @@ const TripModal = ({ isOpen, onClose, onSubmit, initialData, trucks, drivers }) 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white rounded-3xl shadow-xl w-full max-w-2xl overflow-hidden"
+                className="bg-white rounded-3xl shadow-xl w-full max-w-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
             >
-                <div className="p-6 border-b border-neutral-100 flex justify-between items-center">
+                <div className="p-6 border-b border-neutral-100 flex justify-between items-center sticky top-0 bg-white z-10">
                     <h2 className="text-xl font-serif font-bold text-neutral-900">
                         {initialData ? 'Edit Trip' : 'Plan New Trip'}
                     </h2>
@@ -178,24 +185,34 @@ const TripModal = ({ isOpen, onClose, onSubmit, initialData, trucks, drivers }) 
                 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Start Location</label>
-                            <input 
-                                type="text" 
+                        <div className="md:col-span-2">
+                            <LocationPicker 
+                                label="Start Location"
                                 required
-                                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 transition-all"
-                                value={formData.start_location}
-                                onChange={e => setFormData({...formData, start_location: e.target.value})}
+                                value={{
+                                    address: formData.start_location,
+                                    ...formData.start_coordinates
+                                }}
+                                onChange={(loc) => setFormData({
+                                    ...formData,
+                                    start_location: loc.address,
+                                    start_coordinates: { lat: loc.lat, lng: loc.lng }
+                                })}
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">End Location</label>
-                            <input 
-                                type="text" 
+                        <div className="md:col-span-2">
+                            <LocationPicker 
+                                label="End Location"
                                 required
-                                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 transition-all"
-                                value={formData.end_location}
-                                onChange={e => setFormData({...formData, end_location: e.target.value})}
+                                value={{
+                                    address: formData.end_location,
+                                    ...formData.end_coordinates
+                                }}
+                                onChange={(loc) => setFormData({
+                                    ...formData,
+                                    end_location: loc.address,
+                                    end_coordinates: { lat: loc.lat, lng: loc.lng }
+                                })}
                             />
                         </div>
                         <div className="space-y-2">
