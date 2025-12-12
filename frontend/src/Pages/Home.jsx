@@ -37,7 +37,7 @@ const Navbar = () => {
         </div>
       </div>
     </nav >
-);
+  );
 };
 
 const Hero = () => {
@@ -82,7 +82,7 @@ const Hero = () => {
             <motion.div style={{ y: y1 }} className="absolute top-0 right-0 w-[90%] z-10">
               <div className="aspect-[4/5] bg-white rounded-3xl shadow-2xl overflow-hidden border border-neutral-100 p-2 ring-1 ring-neutral-900/5">
                 <div className="w-full h-full bg-[#F5F5F5] rounded-2xl relative overflow-hidden">
-                  
+
                   <svg className="absolute inset-0 w-full h-full pointer-events-none">
                     <defs>
                       <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -90,11 +90,11 @@ const Hero = () => {
                       </pattern>
                     </defs>
                     <rect width="100%" height="100%" fill="url(#grid)" />
-                    
+
                     {/* Decorative Roads */}
                     <path d="M -20 100 L 600 250" fill="none" stroke="#e5e5e5" strokeWidth="12" />
                     <path d="M 200 -20 L 150 600" fill="none" stroke="#e5e5e5" strokeWidth="12" />
-                    
+
                     {/* Main Route Background */}
                     <path
                       d="M 120 100 Q 150 200 250 250 T 400 350"
@@ -115,7 +115,7 @@ const Hero = () => {
                       animate={{ pathLength: 1 }}
                       transition={{ duration: 3, ease: "easeInOut" }}
                     />
-                    
+
                     {/* Vehicle */}
                     <motion.g
                       animate={{ offsetDistance: ["0%", "100%"] }}
@@ -678,15 +678,47 @@ const Footer = () => {
   );
 };
 
+const AuthorContact = () => {
+  return (
+    <div className="w-full bg-neutral-900 text-white py-1 px-4 z-[100] fixed top-0 left-0 right-0 shadow-md">
+      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+          <span className="font-medium tracking-wide">
+            Open to Work
+          </span>
+          <span className="text-neutral-500 hidden md:inline">|</span>
+          <span className="font-normal text-neutral-200">hamza atig</span>
+        </div>
+
+        <div className="hidden md:block text-neutral-400 text-center flex-1 px-8 truncate">
+          This project is a work in progress. Recruiters feel free to reach out.
+        </div>
+
+        <a
+          href="mailto:hamzaatig@icloud.com"
+          className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-3 py-[6px] rounded-full border border-white/10 text-neutral-200 hover:text-white group"
+        >
+          <span>hamzaatig@icloud.com</span>
+          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+        </a>
+      </div>
+    </div>
+  );
+};
+
 const Home = () => {
   return (
-    <div className="bg-white selection:bg-neutral-900 selection:text-white font-sans text-neutral-900 antialiased">
-      <Navbar />
-      <Hero />
-      <Features />
-      <Testimonial />
-      <Footer />
-    </div>
+    <>
+      <AuthorContact />
+      <div className="bg-white selection:bg-neutral-900 selection:text-white font-sans text-neutral-900 antialiased pt-10">
+        <Navbar />
+        <Hero />
+        <Features />
+        <Testimonial />
+        <Footer />
+      </div>
+    </>
   );
 };
 
