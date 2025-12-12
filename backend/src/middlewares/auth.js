@@ -17,9 +17,9 @@ export const authenticate = (req, res, next) => {
     }
 };
 
-export const authorize = (roles = []) => {
-    if (typeof roles === 'string') {
-        roles = [roles];
+export const authorize = (...roles) => {
+    if (roles.length === 1 && Array.isArray(roles[0])) {
+        roles = roles[0];
     }
 
     return (req, res, next) => {
