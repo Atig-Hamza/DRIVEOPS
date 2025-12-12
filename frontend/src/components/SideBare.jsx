@@ -23,7 +23,7 @@ const SideBare = () => {
             const formattedPath = path.charAt(0).toUpperCase() + path.slice(1);
             setActiveItem(formattedPath);
             
-            const isManagementItem = ['Overview', 'Applications', 'Assignment', 'Trucks', 'Trip'].includes(formattedPath);
+            const isManagementItem = ['Overview', 'Applications', 'Trucks', 'Trip', 'Drivers'].includes(formattedPath);
             if (isManagementItem) {
                 setIsPortfolioOpen(true);
             }
