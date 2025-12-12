@@ -46,6 +46,11 @@ const SideBare = () => {
         navigate(`/admin/${id.toLowerCase()}`);
     };
 
+    const logoutButton = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    }
+
     return (
         <div className="fixed top-0 left-0 h-screen bg-white border-r border-neutral-200 w-[280px] flex flex-col font-sans z-50">
             <div className="p-8 pb-6">
@@ -159,7 +164,7 @@ const SideBare = () => {
                     <Settings size={20} className="text-neutral-400 group-hover:text-neutral-900" />
                     <span className="text-sm font-medium">Settings</span>
                 </button>
-                <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors group">
+                <button onClick={logoutButton} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors group">
                     <LogOut size={20} className="text-red-500 group-hover:text-red-600" />
                     <span className="text-sm font-medium">Logout</span>
                 </button>
