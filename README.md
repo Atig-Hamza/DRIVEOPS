@@ -1,121 +1,187 @@
-# 🚛 DriveOps - Fleet Management System
+<div align="center">
 
-**DriveOps** is a modern, full-stack fleet management solution designed to streamline trucking operations. It bridges the gap between fleet administrators and drivers through a dual-portal interface, offering real-time tracking, trip management, and vehicle maintenance monitoring.
+  # 🚛 DRIVEOPS
+  ### Intelligent Fleet Management Solution
 
-## ✨ Features
+  <p align="center">
+    <img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+    <img src="https://img.shields.io/badge/Node.js-18.0-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+    <img src="https://img.shields.io/badge/MongoDB-6.0-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-3.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+    <img src="https://img.shields.io/badge/License-ISC-blue?style=for-the-badge" />
+  </p>
 
-### 🏢 Admin Portal
-*   **Dashboard Overview**: Visual analytics of fleet performance and active trips.
-*   **Fleet Management**: Add, update, and monitor trucks and their specifications.
-*   **Driver Management**: Manage driver profiles and assignments.
-*   **Trip Planning**: Create and assign trips with pickup/dropoff locations.
-*   **Real-time Tracking**: View the live location of trucks on an interactive map.
-*   **Application Management**: Handle driver job applications.
+  <p align="center">
+    <strong>Streamline Operations • Track in Real-Time • Empower Drivers</strong>
+  </p>
 
-### 🚚 Driver Portal
-*   **Mobile-First Dashboard**: Optimized interface for drivers on the go.
-*   **Active Mission View**: Clear details of the current assignment with route visualization.
-*   **Navigation Integration**: One-click routing via Google Maps (Current Location -> Pickup -> Dropoff).
-*   **Vehicle Status**: Interactive visual interface to report tire conditions (Good, Worn, Needs Replacement).
-*   **Trip Management**: Mark trips as completed directly from the dashboard.
+  <br />
+</div>
 
-### 🎨 UI/UX
-*   **Modern Design**: Clean, minimalist aesthetic using Tailwind CSS.
-*   **Interactive Maps**: Powered by Leaflet for detailed route and location visualization.
-*   **Smooth Animations**: Enhanced user experience with Framer Motion.
-*   **Creative 404 Page**: Custom "Lost Signal" error page with immersive animations.
+---
 
-## 🛠️ Tech Stack
+## 📖 Overview
 
-### Frontend
-*   **Framework**: [React](https://reactjs.org/) (Vite)
-*   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-*   **Animations**: [Framer Motion](https://www.framer.com/motion/)
-*   **Maps**: [Leaflet](https://leafletjs.com/) & [React-Leaflet](https://react-leaflet.js.org/)
-*   **Icons**: [Lucide React](https://lucide.dev/)
-*   **HTTP Client**: Axios
+**DriveOps** is a comprehensive, full-stack fleet management platform engineered to bridge the operational gap between fleet administrators and drivers. By leveraging modern web technologies, DriveOps provides a seamless, dual-portal experience that enhances visibility, improves communication, and optimizes logistics efficiency.
 
-### Backend
-*   **Runtime**: [Node.js](https://nodejs.org/)
-*   **Framework**: [Express.js](https://expressjs.com/)
-*   **Database**: [MongoDB](https://www.mongodb.com/) (with Mongoose)
-*   **Authentication**: JWT (JSON Web Tokens)
-*   **File Handling**: Multer
+Whether you are managing a fleet of hundreds or driving a single rig, DriveOps puts control at your fingertips.
+
+---
+
+## ✨ Key Features
+
+### 🏢 Admin Command Center
+*   **📊 Visual Analytics Dashboard**: Get a bird's-eye view of fleet performance, active trips, and efficiency metrics.
+*   **🚛 Fleet Inventory**: Comprehensive management of trucks, including specifications, maintenance history, and status.
+*   **👥 Driver Roster**: Manage driver profiles, track performance, and handle job applications.
+*   **🗺️ Mission Control**: Create, assign, and monitor trips with precise pickup and dropoff coordination.
+*   **📡 Live Telemetry**: Real-time GPS tracking of all active assets on an interactive map.
+
+### 🚚 Driver Cockpit (Mobile-First)
+*   **📱 Adaptive Interface**: A responsive, touch-friendly dashboard designed for use on tablets and smartphones.
+*   **📍 Active Mission Focus**: Distraction-free view of the current assignment with integrated route visualization.
+*   **🧭 Smart Navigation**: One-tap integration with Google Maps for optimized routing (Current Location → Pickup → Dropoff).
+*   **🔧 Interactive Maintenance**: Visual truck schematic for quick tire condition reporting (Good, Worn, Critical).
+*   **✅ Trip Workflow**: Simple "Swipe-to-Complete" style actions to update trip status instantly.
+
+### 🎨 Experience & Design
+*   **Modern Aesthetic**: Built with a clean, minimalist design language using **Tailwind CSS**.
+*   **Fluid Motion**: Powered by **Framer Motion** for smooth transitions and engaging micro-interactions.
+*   **Immersive Maps**: Deep integration with **Leaflet** for rich, interactive mapping experiences.
+*   **Creative Error Handling**: Custom "Lost Signal" 404 page that turns errors into an experience.
+
+---
+
+## 🛠️ Technology Stack
+
+| Component | Technology | Description |
+|-----------|------------|-------------|
+| **Frontend** | **React (Vite)** | High-performance UI library |
+| **Styling** | **Tailwind CSS** | Utility-first CSS framework |
+| **State/Effects** | **Framer Motion** | Production-ready animation library |
+| **Mapping** | **Leaflet / React-Leaflet** | Open-source JavaScript library for mobile-friendly interactive maps |
+| **Icons** | **Lucide React** | Beautiful & consistent icon pack |
+| **Backend** | **Node.js & Express** | Scalable server-side runtime |
+| **Database** | **MongoDB & Mongoose** | Flexible NoSQL database for complex data structures |
+| **Auth** | **JWT** | Secure, stateless authentication |
+| **File Storage** | **Multer** | Middleware for handling `multipart/form-data` |
+
+---
 
 ## 🚀 Getting Started
 
-Follow these steps to set up the project locally.
-
 ### Prerequisites
-*   Node.js (v14+ recommended)
-*   MongoDB (Local or Atlas connection string)
+*   **Node.js** (v16+ recommended)
+*   **MongoDB** (Local instance or Atlas Cluster)
+*   **Git**
 
-### 1. Clone the Repository
+### 📥 Installation
+
+#### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/yourusername/driveops.git
 cd DriveOps
 ```
 
-### 2. Backend Setup
-Navigate to the backend directory and install dependencies:
+#### 2. Backend Configuration
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` directory with the following variables:
+Create a `.env` file in the `backend` root:
 ```env
-MONGO_URI=mongodb://localhost:27017/driveops
-JWT_SECRET=your_super_secret_key
 PORT=4000
+MONGO_URI=mongodb://localhost:27017/driveops
+JWT_SECRET=your_super_secret_complex_key_here
 ```
 
-Start the backend server:
+Start the server:
 ```bash
 npm run dev
+# Server runs on http://localhost:4000
 ```
-The server will run on `http://localhost:4000`.
 
-### 3. Frontend Setup
-Open a new terminal, navigate to the frontend directory, and install dependencies:
+#### 3. Frontend Configuration
+Open a new terminal:
 ```bash
 cd frontend
 npm install
 ```
 
-Start the frontend development server:
+Start the client:
 ```bash
 npm run dev
+# Client runs on http://localhost:5173
 ```
-The application will be available at `http://localhost:5173`.
 
-## 📱 Usage
+---
 
-1.  **Register/Login**: Create an account. By default, new users might be assigned the 'driver' role (depending on implementation). Admin accounts can be set up directly in the database or via a specific registration flow.
-2.  **Admin**: Access `/admin/dashboard` to manage the fleet.
-3.  **Driver**: Access `/driver/dashboard` to view assigned trips and manage vehicle status.
+## 📱 Usage Guide
+
+### 🔐 Authentication
+*   **Registration**: New users can sign up via the `/register` route.
+*   **Roles**: The system supports `admin` and `driver` roles.
+    *   *Note: First admin user usually needs to be seeded or manually updated in DB.*
+
+### 🖥️ Admin Workflow
+1.  Log in as an **Admin**.
+2.  Navigate to **Trucks** to add your fleet vehicles.
+3.  Go to **Drivers** to approve applications or add drivers.
+4.  Use **Trips** to create a new mission and assign a driver/truck pair.
+5.  Monitor progress on the **Tracking** page.
+
+### 🚛 Driver Workflow
+1.  Log in as a **Driver**.
+2.  View the **Dashboard** to see the "Active Mission".
+3.  Use the **Wrench Icon** to report vehicle status before departure.
+4.  Click **Navigate** to open Google Maps.
+5.  Upon arrival, click **Complete Trip** to update the system.
+
+---
 
 ## 📂 Project Structure
 
 ```
 DriveOps/
-├── backend/            # Node.js/Express API
-│   ├── src/
-│   │   ├── config/     # DB and App configuration
-│   │   ├── controllers/# Request handlers
-│   │   ├── middlewares/# Auth and upload middlewares
-│   │   ├── models/     # Mongoose schemas
-│   │   ├── routes/     # API routes
-│   │   └── services/   # Business logic
-│   └── server.js       # Entry point
+├── 📂 backend/                 # API & Server Logic
+│   ├── 📂 src/
+│   │   ├── 📂 config/          # Database & Env Config
+│   │   ├── 📂 controllers/     # Route Logic & Responses
+│   │   ├── 📂 middlewares/     # Auth, Validation, Uploads
+│   │   ├── 📂 models/          # Mongoose Schemas
+│   │   ├── 📂 routes/          # API Endpoint Definitions
+│   │   └── 📂 services/        # Business Logic Layer
+│   └── 📄 server.js            # Application Entry Point
 │
-└── frontend/           # React Client
-    ├── src/
-    │   ├── components/ # Reusable UI components
-    │   ├── Pages/      # Application pages (Admin & Driver)
-    │   ├── assets/     # Images and icons
-    │   └── App.jsx     # Main component & Routing
+└── 📂 frontend/                # React Client Application
+    ├── 📂 src/
+    │   ├── 📂 assets/          # Static Assets (Images, Icons)
+    │   ├── 📂 components/      # Reusable UI Components
+    │   ├── 📂 middleware/      # Protected Route Wrappers
+    │   ├── 📂 Pages/           # View Components
+    │   │   ├── 📂 Admin/       # Admin-specific Views
+    │   │   └── 📂 Driver/      # Driver-specific Views
+    │   └── 📄 App.jsx          # Main Router Configuration
 ```
 
+---
+
+## 🔮 Roadmap
+
+- [ ] **Real-time Sockets**: Implement Socket.io for instant location updates without polling.
+- [ ] **Maintenance Logs**: Detailed history of tire changes and truck repairs.
+- [ ] **Fuel Tracking**: Module for drivers to upload fuel receipts.
+- [ ] **Push Notifications**: Alerts for new trip assignments.
+
+---
+
 ## 📄 License
-This project is licensed under the ISC License.
+
+This project is licensed under the **ISC License**.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by the DriveOps Team</sub>
+</div>
